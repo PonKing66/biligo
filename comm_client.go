@@ -1455,16 +1455,7 @@ func (c *CommClient) ScanQrcode(qrcodeKey string) (*ScanQrcode, *CookieAuth, err
 		return nil, nil, err
 	}
 	var info *ScanQrcode
-	auth := &CookieAuth{
-		// DedeUserID
-		DedeUserID: "YOUR_DedeUserID",
-		// SESSDATA
-		SESSDATA: "YOUR_SESSDATA",
-		// bili_jct
-		BiliJCT: "YOUR_BiliJCT",
-		// DedeUserID__ckMd5
-		DedeUserIDCkMd5: "YOUR_DedeUserIdCkMd5",
-	}
+	auth := &CookieAuth{}
 	for v, k := range headers {
 		if k == "DedeUserID" {
 			auth.DedeUserID = v

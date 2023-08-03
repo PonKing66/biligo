@@ -2248,7 +2248,7 @@ type ScanQrcode struct {
 	Url          string `json:"url"`
 	RefreshToken string `json:"refresh_token"`
 	QrcodeKey    string `json:"qrcode_key"`
-	Timestamp    uint64 `json:"timestamp"`
-	Code         string `json:"code"`
+	Timestamp    int64  `json:"timestamp"`
+	Code         int64  `json:"code"`
 	Message      string `json:"message"`
 }

@@ -659,11 +659,21 @@ func TestCommClient_VideoGetPopular(t *testing.T) {
 	}
 }
 
-func TestCommClient_ScanQrcode(t *testing.T) {
+func TestCommClient_GenerateQrcode(t *testing.T) {
 	r, err := testCommClient.GenerateQrcode()
 	if err != nil {
 		t.Error(err)
 		t.FailNow()
 	}
 	t.Logf("qrcode: %v", r.Qrcode)
+}
+
+func TestCommClient_ScanQrcode(t *testing.T) {
+	r, h, err := testCommClient.ScanQrcode("d0c3acab968ce05ee8211fc1f2a3cc27")
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
+	t.Logf("SESSDATA: %v", h.SESSDATA)
+	t.Logf("Message: %v", r.Message)
 }
