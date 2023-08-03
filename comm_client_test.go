@@ -646,3 +646,15 @@ func TestCommClient_UserGetInfo(t *testing.T) {
 	t.Logf("mid: %d,name: %s,sex: %s,level: %d,sign: %s", r.MID, r.Name, r.Sex, r.Level, r.Sign)
 	t.Logf("live: %d,officialDesc: %s,nameplateName: %s,pendantName: %s,vip: %s", r.LiveRoom.LiveStatus, r.Official.Title, r.Nameplate.Name, r.Pendant.Name, r.Vip.Label.Text)
 }
+
+func TestCommClient_VideoGetPopular(t *testing.T) {
+	r, err := testCommClient.VideoGetPopular(1, 20)
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
+	t.Logf("noMore: %v", r.NoMore)
+	for _, v := range r.List {
+		t.Logf("title: %v,tname: %v, desc: %v", v.Title, v.Tname, v.Desc)
+	}
+}

@@ -1,4 +1,4 @@
-module github.com/iyear/biligo
+module github.com/PonKing66/biligo
 
 go 1.16
 

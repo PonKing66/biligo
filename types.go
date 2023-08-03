@@ -2048,8 +2048,8 @@ type UserInfo struct {
 	// 只能查看自己的
 	//
 	// 默认为0
-	Coins     float32  `json:"coins"`
-	FansBadge bool `json:"fans_badge"` // 是否具有粉丝勋章 false：无 true：有
+	Coins     float32 `json:"coins"`
+	FansBadge bool    `json:"fans_badge"` // 是否具有粉丝勋章 false：无 true：有
 	Official  struct {
 		// 认证类型
 		//
@@ -2161,4 +2161,80 @@ type UserInfo struct {
 		UserUpgradeStatus int  `json:"user_upgrade_status"` //
 		ShowUpgradeWindow bool `json:"show_upgrade_window"` //
 	} `json:"series"` //
+}
+
+type PopularVideoList struct {
+	Aid       int64  `json:"aid"`
+	Bvid      string `json:"bvid"`
+	Cid       int64  `json:"cid"`
+	Copyright int64  `json:"copyright"`
+	Ctime     int64  `json:"ctime"`
+	Desc      string `json:"desc"`
+	Dimension struct {
+		Height int64 `json:"height"`
+		Rotate int64 `json:"rotate"`
+		Width  int64 `json:"width"`
+	} `json:"dmension"`
+	Duration   int64       `json:"duration"`
+	Dynamic    string      `json:"dynamic"`
+	FirstFrame string      `json:"first_frame"`
+	IsOgv      bool        `json:"is_ogv"`
+	MissionID  int64       `json:"mission_id"`
+	OgvInfo    interface{} `json:"ogv_info"`
+	Owner      struct {
+		Face string `json:"face"`
+		Mid  int64  `json:"mid"`
+		Name string `json:"name"`
+	} `json:"owner"`
+	Pic         string `json:"pic"`
+	PubLocation string `json:"pub_location"`
+	Pubdate     int64  `json:"pubdate"`
+	RcmdReason  struct {
+		Content    string `json:"content"`
+		CornerMark int64  `json:"corner_mark"`
+	} `json:"rcmd_reason"`
+	Rights struct {
+		ArcPay        int64 `json:"arc_pay"`
+		Autoplay      int64 `json:"autoplay"`
+		Bp            int64 `json:"bp"`
+		Download      int64 `json:"download"`
+		Elec          int64 `json:"elec"`
+		Hd5           int64 `json:"hd5"`
+		IsCooperation int64 `json:"is_cooperation"`
+		Movie         int64 `json:"movie"`
+		NoBackground  int64 `json:"no_background"`
+		NoReprint     int64 `json:"no_reprint"`
+		Pay           int64 `json:"pay"`
+		PayFreeWatch  int64 `json:"pay_free_watch"`
+		UgcPay        int64 `json:"ugc_pay"`
+		UgcPayPreview int64 `json:"ugc_pay_preview"`
+	} `json:"rights"`
+	SeasonID    int64  `json:"season_id"`
+	SeasonType  int64  `json:"season_type"`
+	ShortLink   string `json:"short_link"`
+	ShortLinkV2 string `json:"short_link_v2"`
+	Stat        struct {
+		Aid      int64 `json:"aid"`
+		Coin     int64 `json:"coin"`
+		Danmaku  int64 `json:"danmaku"`
+		Dislike  int64 `json:"dislike"`
+		Favorite int64 `json:"favorite"`
+		HisRank  int64 `json:"his_rank"`
+		Like     int64 `json:"like"`
+		NowRank  int64 `json:"now_rank"`
+		Reply    int64 `json:"reply"`
+		Share    int64 `json:"share"`
+		View     int64 `json:"view"`
+	} `json:"stat"`
+	State    int64  `json:"state"`
+	Tid      int64  `json:"tid"`
+	Title    string `json:"title"`
+	Tname    string `json:"tname"`
+	UpFromV2 int64  `json:"up_from_v2"`
+	Videos   int64  `json:"videos"`
+}
+
+type PopularVideoLists struct {
+	List   []PopularVideoList `json:"list"`
+	NoMore bool               `json:"no_more"`
 }

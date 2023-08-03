@@ -5,7 +5,7 @@
 ![](https://img.shields.io/badge/license-GPL-lightgrey.svg?style=flat-square)
 ![](https://img.shields.io/github/v/release/iyear/biligo?color=red&style=flat-square)
 ![](https://img.shields.io/github/last-commit/iyear/biligo?style=flat-square)
-[![Go Reference](https://pkg.go.dev/badge/github.com/iyear/biligo.svg)](https://pkg.go.dev/github.com/iyear/biligo)
+[![Go Reference](https://pkg.go.dev/badge/github.com/PonKing66/biligo.svg)](https://pkg.go.dev/github.com/PonKing66/biligo)
 
 **v0版本不保证对外函数、结构的不变性，请勿大规模用于生产环境**
 
@@ -17,7 +17,7 @@
 - 完善的单元测试，易懂的函数命名，极少的第三方库依赖
 - 代码、结构体注释完善，无需文档开箱即用
 - 其他功能性代码，例如 `AV/BV`互转，`GetVideoZone()`获取分区信息...
-- 配套工具 [biligo-live](https://github.com/iyear/biligo-live) 封装直播 `WebSocket` 协议
+- 配套工具 [biligo-live](https://github.com/PonKing66/biligo-live) 封装直播 `WebSocket` 协议
 ### 说明
 
 - 该项目永远不会编写直接涉及滥用的接口
@@ -37,11 +37,11 @@ https://github.com/MoyuScript/bilibili-api
 请让 `biligo` 永远保持在最新版本
 
 ```shell
-go get -u github.com/iyear/biligo
+go get -u github.com/PonKing66/biligo
 ```
 
 ```go
-import "github.com/iyear/biligo"
+import "github.com/PonKing66/biligo"
 ```
 
 ### 使用
@@ -51,7 +51,7 @@ package main
 
 import (
 	"fmt"
-	bg "github.com/iyear/biligo"
+	bg "github.com/PonKing66/biligo"
 	"log"
 )
 
@@ -155,7 +155,7 @@ package main
 
 import (
 	"fmt"
-	bg "github.com/iyear/biligo"
+	bg "github.com/PonKing66/biligo"
 	"github.com/tidwall/gjson"
 	"log"
 )
@@ -192,7 +192,7 @@ func GetComments() {
 - 由于项目特殊性，随时可能删库，随时可能弃坑
 ## 已实现API
 
-[v0](https://github.com/iyear/biligo/blob/v0/API.md)
+[v0](https://github.com/PonKing66/biligo/blob/v0/API.md)
 
 ## 留言
 ### 1

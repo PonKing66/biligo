@@ -2,9 +2,9 @@ package biligo
 
 import (
 	"encoding/json"
+	"github.com/PonKing66/biligo/internal/util"
+	"github.com/PonKing66/biligo/proto/dm"
 	"github.com/golang/protobuf/proto"
-	"github.com/iyear/biligo/internal/util"
-	"github.com/iyear/biligo/proto/dm"
 	"github.com/tidwall/gjson"
 	"net/http"
 	"strconv"
@@ -1333,7 +1333,6 @@ func (c *CommClient) CommentGetMain(oid int64, tp int, mode int, next int, ps in
 
 // CommentGetReply 获取指定评论和二级回复
 //
-//
 // oid: 对应类型的ID
 //
 // tp: 类型。https://github.com/SocialSisterYi/bilibili-API-collect/tree/master/comment#%E8%AF%84%E8%AE%BA%E5%8C%BA%E7%B1%BB%E5%9E%8B%E4%BB%A3%E7%A0%81
@@ -1383,4 +1382,27 @@ func (c *CommClient) UserGetInfo(mid int64) (*UserInfo, error) {
 		return nil, err
 	}
 	return r, nil
+}
+
+// VideoGetPopular
+//
+// 获取当前热门视频列表
+func (c *CommClient) VideoGetPopular(pn, ps int) (*PopularVideoLists, error) {
+	resp, err := c.RawParse(
+		BiliApiURL,
+		"/x/web-interface/popular",
+		"GET",
+		map[string]string{
+			"pn": strconv.Itoa(pn),
+			"ps": strconv.Itoa(ps),
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+	var list *PopularVideoLists
+	if err = json.Unmarshal(resp.Data, &list); err != nil {
+		return nil, err
+	}
+	return list, nil
 }

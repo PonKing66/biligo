@@ -3,9 +3,9 @@ package biligo
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/PonKing66/biligo/internal/util"
+	"github.com/PonKing66/biligo/proto/dm"
 	"github.com/golang/protobuf/proto"
-	"github.com/iyear/biligo/internal/util"
-	"github.com/iyear/biligo/proto/dm"
 	"github.com/pkg/errors"
 	"github.com/tidwall/gjson"
 	"io"
@@ -2737,4 +2737,27 @@ func (b *BiliClient) UserGetInfo(mid int64) (*UserInfo, error) {
 		return nil, err
 	}
 	return r, nil
+}
+
+// VideoGetPopular
+//
+// 获取当前热门视频列表
+func (b *BiliClient) VideoGetPopular(pn, ps int) (*PopularVideoLists, error) {
+	resp, err := b.RawParse(
+		BiliApiURL,
+		"/x/web-interface/popular",
+		"GET",
+		map[string]string{
+			"pn": strconv.Itoa(pn),
+			"ps": strconv.Itoa(ps),
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+	var list *PopularVideoLists
+	if err = json.Unmarshal(resp.Data, &list); err != nil {
+		return nil, err
+	}
+	return list, nil
 }
