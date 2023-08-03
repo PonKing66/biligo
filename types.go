@@ -2238,3 +2238,17 @@ type PopularVideoLists struct {
 	List   []PopularVideoList `json:"list"`
 	NoMore bool               `json:"no_more"`
 }
+
+type GenerateQrcodeInfo struct {
+	Url    string `json:"url"`
+	Qrcode string `json:"qrcode_key"`
+}
+
+type ScanQrcode struct {
+	Url          string `json:"url"`
+	RefreshToken string `json:"refresh_token"`
+	QrcodeKey    string `json:"qrcode_key"`
+	Timestamp    uint64 `json:"timestamp"`
+	Code         string `json:"code"`
+	Message      string `json:"message"`
+}

@@ -658,3 +658,12 @@ func TestCommClient_VideoGetPopular(t *testing.T) {
 		t.Logf("title: %v,tname: %v, desc: %v", v.Title, v.Tname, v.Desc)
 	}
 }
+
+func TestCommClient_ScanQrcode(t *testing.T) {
+	r, err := testCommClient.GenerateQrcode()
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
+	t.Logf("qrcode: %v", r.Qrcode)
+}

@@ -69,6 +69,18 @@ func (c *CommClient) Raw(base, endpoint, method string, payload map[string]strin
 	return raw, nil
 }
 
+// RawParseAndReturnHeaders
+//
+// base末尾带/   并返回resp头信息
+func (c *CommClient) RawParseAndReturnHeaders(base, endpoint, method string, payload map[string]string) (*Response, map[string]interface{}, error) {
+	raw, headers, err := c.rawAndGetHeaders(base, endpoint, method, payload, nil, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	parse, err := c.parse(raw)
+	return parse, headers, err
+}
+
 // RawParse
 //
 // base末尾带/
@@ -1390,7 +1402,7 @@ func (c *CommClient) UserGetInfo(mid int64) (*UserInfo, error) {
 func (c *CommClient) VideoGetPopular(pn, ps int) (*PopularVideoLists, error) {
 	resp, err := c.RawParse(
 		BiliApiURL,
-		"/x/web-interface/popular",
+		"x/web-interface/popular",
 		"GET",
 		map[string]string{
 			"pn": strconv.Itoa(pn),
@@ -1405,4 +1417,69 @@ func (c *CommClient) VideoGetPopular(pn, ps int) (*PopularVideoLists, error) {
 		return nil, err
 	}
 	return list, nil
+}
+
+// GenerateQrcode
+//
+// 申请二维码(web端)
+func (c *CommClient) GenerateQrcode() (*GenerateQrcodeInfo, error) {
+	resp, err := c.RawParse(
+		BiliPassportURL,
+		"x/passport-login/web/qrcode/generate",
+		"GET",
+		map[string]string{},
+	)
+	if err != nil {
+		return nil, err
+	}
+	var info *GenerateQrcodeInfo
+	if err = json.Unmarshal(resp.Data, &info); err != nil {
+		return nil, err
+	}
+	return info, nil
+}
+
+// ScanQrcode
+//
+// 扫码登录(web端)
+func (c *CommClient) ScanQrcode(qrcodeKey string) (*ScanQrcode, *CookieAuth, error) {
+	resp, headers, err := c.RawParseAndReturnHeaders(
+		BiliPassportURL,
+		"x/passport-login/web/qrcode/poll",
+		"GET",
+		map[string]string{
+			"qrcode_key": qrcodeKey,
+		},
+	)
+	if err != nil {
+		return nil, nil, err
+	}
+	var info *ScanQrcode
+	auth := &CookieAuth{
+		// DedeUserID
+		DedeUserID: "YOUR_DedeUserID",
+		// SESSDATA
+		SESSDATA: "YOUR_SESSDATA",
+		// bili_jct
+		BiliJCT: "YOUR_BiliJCT",
+		// DedeUserID__ckMd5
+		DedeUserIDCkMd5: "YOUR_DedeUserIdCkMd5",
+	}
+	for v, k := range headers {
+		if k == "DedeUserID" {
+			auth.DedeUserID = v
+		} else if k == "SESSDATA" {
+			auth.SESSDATA = v
+		} else if k == "bili_jct" {
+			auth.BiliJCT = v
+		} else if k == "DedeUserID__ckMd5" {
+			auth.DedeUserIDCkMd5 = v
+		}
+	}
+
+	if err = json.Unmarshal(resp.Data, &info); err != nil {
+		return nil, auth, err
+	}
+
+	return info, auth, nil
 }

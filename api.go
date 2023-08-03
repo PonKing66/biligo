@@ -80,6 +80,33 @@ func (h *baseClient) request(req *http.Request, v interface{}) ([]byte, error) {
 
 	return raw, nil
 }
+
+// request v为携带的参数，用于debug输出
+func (h *baseClient) requestAndGetHeaders(req *http.Request, v interface{}) ([]byte, map[string]interface{}, error) {
+	resp, err := h.client.Do(req)
+	if err != nil {
+		return nil, nil, err
+	}
+	resp.Close = true
+	defer resp.Body.Close()
+
+	raw, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	if h.debug {
+		h.logger.Printf("%s %s  %+v", req.Method, req.URL, v)
+		h.logger.Printf("%s", string(raw))
+	}
+	headers := make(map[string]interface{}, 5)
+	for _, item := range resp.Cookies() {
+		headers[item.Name] = item.Value
+	}
+
+	return raw, headers, nil
+}
+
 func (h *baseClient) raw(base, endpoint, method string, payload map[string]string, dAfter func(d *url.Values), reqAfter func(r *http.Request)) ([]byte, error) {
 	var (
 		req *http.Request
@@ -121,6 +148,49 @@ func (h *baseClient) raw(base, endpoint, method string, payload map[string]strin
 
 	return h.request(req, payload)
 }
+
+func (h *baseClient) rawAndGetHeaders(base, endpoint, method string, payload map[string]string, dAfter func(d *url.Values), reqAfter func(r *http.Request)) ([]byte, map[string]interface{}, error) {
+	var (
+		req *http.Request
+		err error
+	)
+
+	data := url.Values{}
+	for k, v := range payload {
+		data.Add(k, v)
+	}
+
+	// 侵入处理values
+	if dAfter != nil {
+		dAfter(&data)
+	}
+
+	link := base + endpoint
+	switch method {
+	case http.MethodGet:
+		if req, err = http.NewRequest(method, link, nil); err != nil {
+			return nil, nil, err
+		}
+		req.URL.RawQuery = data.Encode()
+	case http.MethodPost:
+		if req, err = http.NewRequest(method, link, strings.NewReader(data.Encode())); err != nil {
+			return nil, nil, err
+		}
+	}
+
+	req.Header.Add("Origin", "https://www.bilibili.com")
+	req.Header.Add("Referer", "https://www.bilibili.com")
+	req.Header.Add("Content-type", "application/x-www-form-urlencoded")
+	req.Header.Add("User-Agent", h.ua)
+
+	// 侵入处理req
+	if reqAfter != nil {
+		reqAfter(req)
+	}
+
+	return h.requestAndGetHeaders(req, payload)
+}
+
 func (h *baseClient) parse(raw []byte) (*Response, error) {
 	var result = &Response{}
 	if err := json.Unmarshal(raw, &result); err != nil {
